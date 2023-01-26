@@ -56,6 +56,31 @@ app.get("/api/4", async (req, res) => {
       })
       .limit(10)
       .toArray();
+
+    res.status(200).json({
+      ok: true,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+});
+
+app.get("/api/5", async (req, res) => {
+  try {
+    const result = await db
+      .collection("listingsAndReviews")
+      .find({
+        $or: [
+          { cancellation_policy: "flexible" },
+          { cancellation_policy: "moderate" },
+        ],
+      })
+      .limit(10)
+      .toArray();
     res.status(200).json({
       ok: true,
       data: result,
