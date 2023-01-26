@@ -93,6 +93,26 @@ app.get("/api/5", async (req, res) => {
   }
 });
 
+app.get("/api/6", async (req, res) => {
+  try {
+    const result = await db
+      .collection("listingsAndReviews")
+      .find({ $and: [{ beds: 6 }, { bedrooms: 6 }] })
+      .limit(10)
+      .toArray();
+
+    res.status(200).json({
+      ok: true,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+});
+
 mongoose
   .connect(
     "mongodb+srv://root:toor@cluster0.dyvadcq.mongodb.net/sample_airbnb?retryWrites=true&w=majority"
