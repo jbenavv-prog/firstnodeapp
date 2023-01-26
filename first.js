@@ -44,6 +44,30 @@ app.get("/api/3", async (req, res) => {
   }
 });
 
+app.get("/api/4", async (req, res) => {
+  try {
+    const result = await db
+      .collection("listingsAndReviews")
+      .find({
+        last_review: {
+          $gte: new Date("2017-02-01"),
+          $lte: new Date(" 2018-12-23"),
+        },
+      })
+      .limit(10)
+      .toArray();
+    res.status(200).json({
+      ok: true,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+});
+
 mongoose
   .connect(
     "mongodb+srv://root:toor@cluster0.dyvadcq.mongodb.net/sample_airbnb?retryWrites=true&w=majority"
@@ -62,6 +86,5 @@ mongoose
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
 });
-
 
 //new comment
