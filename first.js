@@ -4,6 +4,8 @@ const app = express();
 const port = 3000;
 let db;
 
+app.use(express.json());
+
 app.get("/api/1", async (req, res) => {
   const result = await db
     .collection("listingsAndReviews")
@@ -116,7 +118,7 @@ app.get("/api/6", async (req, res) => {
 app.get("/api/7", async (req, res) => {
   try {
     console.log(req.query);
-    const price = parseInt(req.query.price)
+    const price = parseInt(req.query.price);
 
     const result = await db
       .collection("listingsAndReviews")
@@ -133,6 +135,27 @@ app.get("/api/7", async (req, res) => {
       ok: false,
       message: error.message,
     });
+  }
+});
+
+app.post("/api/8", async (req, res) => {
+  try {
+    console.log(req.body);
+    const result = await db
+      .collection("listingsAndReviews")
+      .find(req.body)
+      .limit(10)
+      .toArray();
+
+      res.status(200).json({
+        ok: true,
+        data: result
+      })
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      message: error.message
+    })
   }
 });
 
@@ -156,4 +179,3 @@ app.listen(port, () => {
 });
 
 //new comment
-
