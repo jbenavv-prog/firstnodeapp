@@ -113,6 +113,29 @@ app.get("/api/6", async (req, res) => {
   }
 });
 
+app.get("/api/7", async (req, res) => {
+  try {
+    console.log(req.query);
+    const price = parseInt(req.query.price)
+
+    const result = await db
+      .collection("listingsAndReviews")
+      .find({ price })
+      .limit(10)
+      .toArray();
+
+    res.status(200).json({
+      ok: true,
+      data: result,
+    });
+  } catch (error) {
+    res.status(400).json({
+      ok: false,
+      message: error.message,
+    });
+  }
+});
+
 mongoose
   .connect(
     "mongodb+srv://root:toor@cluster0.dyvadcq.mongodb.net/sample_airbnb?retryWrites=true&w=majority"
@@ -133,3 +156,4 @@ app.listen(port, () => {
 });
 
 //new comment
+
