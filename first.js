@@ -1,10 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
+const cors = require("cors");
 const app = express();
 const port = 3000;
 let db;
 
 app.use(express.json());
+app.use(cors());
 
 app.get("/api/1", async (req, res) => {
   const result = await db
@@ -122,7 +124,7 @@ app.get("/api/7", async (req, res) => {
 
     const result = await db
       .collection("listingsAndReviews")
-      .find({ price })
+      .find({ price: price })
       .limit(10)
       .toArray();
 
@@ -147,15 +149,15 @@ app.post("/api/8", async (req, res) => {
       .limit(10)
       .toArray();
 
-      res.status(200).json({
-        ok: true,
-        data: result
-      })
+    res.status(200).json({
+      ok: true,
+      data: result,
+    });
   } catch (error) {
     res.status(400).json({
       ok: false,
-      message: error.message
-    })
+      message: error.message,
+    });
   }
 });
 
